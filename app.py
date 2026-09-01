@@ -31,7 +31,7 @@ def prompt(t,typ,level,r):
     return f'''You are ThreatLens AI. Analyze ONLY this supplied VirusTotal and WHOIS data. Do not independently investigate or invent facts. Missing data is unavailable. SAFE is not a guarantee.\nTarget: {t}\nType: {typ}\nLevel: {level}\nData: {json.dumps(r,default=str,indent=2)}\n{inst}\nReturn ONLY JSON: {{"verdict":"SAFE","confidence":"HIGH","summary":"Short assessment","key_findings":["Finding"],"risk_factors":["Risk"],"recommendation":"Action"}}. Allowed verdicts SAFE,SUSPICIOUS,MALICIOUS,UNKNOWN; confidence LOW,MEDIUM,HIGH.'''
 def gemini(p,key):
     try:
-        genai.configure(api_key=key); x=genai.GenerativeModel('gemini-2.5-flash').generate_content(p).text.strip().replace('```json','').replace('```','').strip(); return json.loads(x)
+        genai.configure(api_key=key); x=genai.GenerativeModel('gemini-3.6-flash').generate_content(p).text.strip().replace('```json','').replace('```','').strip(); return json.loads(x)
     except Exception as e: return {'verdict':'UNKNOWN','confidence':'LOW','summary':'Gemini analysis failed.','key_findings':[],'risk_factors':[],'recommendation':str(e)}
 typ=st.selectbox('Target Type',['IP Address','Domain','URL']); t=st.text_input('Enter Target',placeholder={'IP Address':'8.8.8.8','Domain':'example.com','URL':'https://example.com'}[typ]); level=st.selectbox('Knowledge Level',['Beginner','Intermediate','Expert'])
 if st.button('🔎 Analyze Target',type='primary',use_container_width=True):
